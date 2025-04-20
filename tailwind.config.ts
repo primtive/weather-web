@@ -57,7 +57,7 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			backgroundImage: {
-				'gradient-sunny': 'linear-gradient(180deg, rgba(19,62,106,1) 0%, rgba(20,144,177,1) 45%, rgba(114,201,208,1) 83%, rgba(188,223,221,1) 100%);',
+				'gradient-main': 'radial-gradient(circle,rgba(122, 174, 207, 1) 0%, rgba(116, 185, 219, 1) 100%);',
 				'gradient-home': 'radial-gradient(circle, rgba(174,226,238,1) 0%, rgba(148,187,233,1) 100%);'
 			}
 		}
