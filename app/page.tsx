@@ -29,7 +29,10 @@ import { getWeatherConditionIcon } from "@/data/weatherConditions";
 import { DataDownload } from "@/components/data-download";
 moment.locale('ru')
 
-export default async function Frame() {
+export const dynamic = 'force-dynamic';
+export const revalidate = 60;
+
+export default async function HomePage() {
 
   const windroseData: any = [];
   const { accuracyData, comprasionData, recordData, weatherCondition } = await getData();
@@ -44,7 +47,7 @@ export default async function Frame() {
               Метеорологическая панель
             </h1>
             <p className=" mt-2 ">
-              Последнее обновление: {moment(recordData.time).format('DD MMMM YYYY, HH:mm:ss')}
+              Последнее обновление: {moment(recordData.time).utcOffset(300).format('DD MMMM YYYY, HH:mm:ss')}
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -63,7 +66,7 @@ export default async function Frame() {
                 height={250}
                 className='drop-shadow-md mb-5'
               ></Image>
-              <p className="text-5xl font-normal">{recordData.temp_e} °C</p>
+              <p className="text-5xl font-normal">{Math.round(recordData.temp_e!)} °C</p>
               <p className="text-lg font-light">{weatherCondition}</p>
             </CardContent>
           </Card>
@@ -110,7 +113,7 @@ export default async function Frame() {
                 <div className="flex justify-between items-start">
                   <div>
                     <p>Ветер</p>
-                    <h2 className="text-3xl font-bold mt-1">5 м/с</h2>
+                    <h2 className="text-3xl font-bold mt-1">{Math.round(recordData.wind_speed!)}</h2>
                   </div>
                   <WeatherIcon src={Wind5} />
                 </div>
@@ -127,7 +130,7 @@ export default async function Frame() {
                     <p>Солнце</p>
                     <h2 className="text-3xl font-bold mt-1">{recordData.light} лк</h2>
                   </div>
-                  <WeatherIcon src={`/icons/all/uv-index-${recordData.uv}.svg`} />
+                  <WeatherIcon src={`/icons/all/uv-index-${Math.min(Math.max(recordData.uv, 1), 11)}.svg`} />
                 </div>
                 <div className="flex items-center mt-6 gap-1">
                   УФ индекс:
@@ -165,7 +168,7 @@ export default async function Frame() {
                 </div>
                 <div>
                   <p>Температура</p>
-                  <h2 className="text-2xl font-bold mt-1">{recordData.temp_h} °C</h2>
+                  <h2 className="text-2xl font-bold mt-1">{Math.round(recordData.temp_h!)} °C</h2>
                 </div>
                 <div>
                   <p>Влажность</p>

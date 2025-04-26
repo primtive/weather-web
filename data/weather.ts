@@ -65,7 +65,7 @@ const calculateAccuracy = (data: MetricData[]): AccuracyResult[] => {
 
   return (Object.keys(avgMetrics) as Array<keyof typeof avgMetrics>).map((key) => {
     const diff = Math.abs(local.metrics[key] - avgMetrics[key]);
-    const accuracy = key === "humd"
+    const accuracy = local.metrics[key] && key === "humd"
       ? 100 - diff
       : 100 - (diff / avgMetrics[key] * 100);
 

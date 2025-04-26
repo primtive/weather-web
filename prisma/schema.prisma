@@ -25,10 +25,10 @@ model Record {
   time            DateTime         @default(now())
   temp_h          Float?
   humd_h          Int?
-  pres_h          Float?
+  pres_h          Int?
   temp_e          Float?
   humd_e          Int?
-  pres_e          Float?
+  pres_e          Int?
   aqi             Int?
   tvoc            Int?
   eco2            Int?
