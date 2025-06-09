@@ -10,7 +10,6 @@ import Image from "next/image";
 import React from "react";
 import Humidity from "@/public/icons/all/humidity.svg"
 import Barometer from "@/public/icons/all/barometer.svg"
-import Wind5 from "@/public/icons/all/wind-beaufort-5.svg"
 import { WeatherIcon } from "@/components/weather-icon";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { TemperatureChart } from "@/components/temperature-chart";
@@ -27,7 +26,25 @@ import 'moment/locale/ru'
 import { cn } from "@/lib/utils";
 import { getWeatherConditionIcon } from "@/data/weatherConditions";
 import { DataDownload } from "@/components/data-download";
+import { Metadata } from "next";
 moment.locale('ru')
+
+
+export async function generateMetadata(): Promise<Metadata> {
+
+  const { weatherCondition, recordData: { isDay } } = await getData();
+
+  return {
+    title: "Метеорологическая панель",
+    description: "Панель мониторинга погоды и качества воздуха с актуальными данными, графиками и сравнением с внешними источниками.",
+    openGraph: {
+      title: "Метеорологическая панель",
+      description: "Панель мониторинга погоды и качества воздуха с актуальными данными, графиками и сравнением с внешними источниками.",
+      type: "website",
+    },
+    icons: [{ rel: "icon", url: `/favicons/${isDay ? weatherCondition.favicon_day: weatherCondition.favicon_night}.svg` }]
+  }
+}
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 60;
@@ -36,6 +53,8 @@ export default async function HomePage() {
 
   const windroseData: any = [];
   const { accuracyData, comprasionData, recordData, weatherCondition } = await getData();
+
+  const windSpeed = Math.round(recordData.wind_speed!);
   return (
     <div className="flex">
       {/* Main content */}
@@ -60,14 +79,14 @@ export default async function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6 justify-between">
           <Card className="bg-gradient-main border-0 w-full text-background flex items-center text-center min-w-[150px]">
             <CardContent>
-              <Image src={`/icons/all/${getWeatherConditionIcon(recordData.weatherCode, recordData.isDay)}.svg`}
+              <Image src={`/icons/all/${getWeatherConditionIcon(weatherCondition.code, recordData.isDay)}.svg`}
                 alt=''
                 width={250}
                 height={250}
                 className='drop-shadow-md mb-5'
               ></Image>
               <p className="text-5xl font-normal">{Math.round(recordData.temp_e!)} °C</p>
-              <p className="text-lg font-light">{weatherCondition}</p>
+              <p className="text-lg font-light">{weatherCondition.text}</p>
             </CardContent>
           </Card>
 
@@ -81,7 +100,7 @@ export default async function HomePage() {
                   </div>
                   <WeatherIcon src={Humidity} />
                 </div>
-                <div className="flex items-center mt-6 gap-1">
+                <div className="flex items-center mt-2 gap-1">
                   Уровень дождя:
                   <span className="font-bold">
                     {recordData.rain}
@@ -103,6 +122,12 @@ export default async function HomePage() {
                   <div>
                     <p>Давление</p>
                     <h2 className="text-3xl font-bold mt-1">{recordData.pres_e} гПа</h2>
+                    <div className="flex items-center mt-2 gap-1">
+                      <span className="font-bold">
+                        {Math.round(recordData.pres_e! * 0.750062)}
+                      </span>
+                      мм рт. ст.
+                    </div>
                   </div>
                   <WeatherIcon src={Barometer} />
                 </div>
@@ -113,11 +138,11 @@ export default async function HomePage() {
                 <div className="flex justify-between items-start">
                   <div>
                     <p>Ветер</p>
-                    <h2 className="text-3xl font-bold mt-1">{Math.round(recordData.wind_speed!)}</h2>
+                    <h2 className="text-3xl font-bold mt-1">{windSpeed} м/с</h2>
                   </div>
-                  <WeatherIcon src={Wind5} />
+                  <WeatherIcon src={`/icons/all/${0 <= windSpeed && windSpeed <= 12 ? `wind-beaufort-${windSpeed}` : 'wind'}.svg`} />
                 </div>
-                <div className="flex items-center mt-6">
+                <div className="flex items-center mt-2">
                   <ArrowUp className={cn(`transform rotate-[${recordData.wind_dir || 0}deg]`)} />
                   {getWindDirection(recordData.wind_dir || 0)}
                 </div>
@@ -132,7 +157,7 @@ export default async function HomePage() {
                   </div>
                   <WeatherIcon src={`/icons/all/uv-index-${Math.min(Math.max(recordData.uv, 1), 11)}.svg`} />
                 </div>
-                <div className="flex items-center mt-6 gap-1">
+                <div className="flex items-center mt-2 gap-1">
                   УФ индекс:
                   <span className="font-bold">
                     {recordData.uv}
@@ -272,7 +297,7 @@ export default async function HomePage() {
           {/* Wind Pattern */}
           <WindroseChart windroseData={windroseData} />
         </div>
-      </main>
-    </div>
+      </main >
+    </div >
   );
 }

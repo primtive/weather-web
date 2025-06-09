@@ -1,6 +1,6 @@
 import { calculateWindRose } from "@eunchurn/react-windrose";
 import prisma from "@/data/prisma";
-import { getWeatherCondition } from "./weatherConditions";
+import { calculateWeatherCondition, getWeatherCondition } from "./weatherConditions";
 
 type ExternalSource = {
   temp: number
@@ -142,7 +142,8 @@ export async function getData() {
     recordData,
     comprasionData,
     accuracyData,
-    weatherCondition: getWeatherCondition(recordData.weatherCode)
+    // weatherCondition: getWeatherCondition(recordData.weatherCode),
+    weatherCondition: calculateWeatherCondition(recordData)
   }
 }
 

@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 const font = Montserrat({subsets: ['cyrillic']})
 
 export const metadata: Metadata = {
-  title: "Погода",
+  title: "Метеорологическая панель",
 };
 
 export default function RootLayout({
