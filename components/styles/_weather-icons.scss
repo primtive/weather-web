@@ -1,0 +1,284 @@
+@use 'colors';
+
+.daniel-szulc-weather-widget .weather-widget .weather-icon {
+
+    margin: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+
+
+    svg, .shape {
+      filter: colors.$shadow;
+      max-width: 100%;
+      max-height: 100%;
+      height: auto;
+      width: auto;
+    }
+
+    .clear {
+      height: 90%;
+    }
+
+
+  .cloudy {
+    all: initial;
+    min-width: 60%;
+    min-height: 60%;
+    width: 90%;
+    height: auto;
+    max-height: 100%;
+    max-width: 100%;
+
+    text-align: center;
+    margin: 0;
+    -moz-margin-start: 0;
+    -moz-margin-end:0;
+    .Sun {
+      padding-left: 5%;
+      padding-top: 5%;
+      max-width: 35%;
+      min-width: 30%;
+      width: auto;
+      height: 50%;
+      top: 0;
+      z-index: 1;
+      position: absolute;
+
+    }
+
+    .Cloud {
+      position: relative;
+      height: 100%;
+      z-index: 2;
+      width: auto;
+      -moz-margin-start: 10%;
+      -moz-margin-end:10%;
+    }
+  }
+
+
+  .clouds{
+    all: initial;
+    margin-block: auto;
+    text-align: center;
+    display: block;
+    margin: auto;
+    height: auto;
+    max-width: 90%;
+    -moz-margin-start: 10%;
+    -moz-margin-end:10%;
+  }
+
+    .fall {
+      all: initial;
+      display: block;
+      height: 100%;
+      width: 100%;
+      text-align: center;
+
+      .cloudy{
+        min-width: 60%;
+        min-height: 60%;
+        width: 90%;
+        height: auto;
+        margin-bottom: 0;
+        max-height: 100%;
+        max-width: 100%;
+        margin-inline: auto;
+        text-align: center;
+      }
+
+      .Cloud {
+        position: relative;
+        height: 75%;
+        z-index: 2;
+        width: auto;
+      }
+
+      .Sun{
+        width: 50%;
+        height: 40%;
+      }
+
+      .drops {
+        all: revert;
+        width: 100%;
+        text-align: center;
+        margin-inline: auto;
+        display: flex;
+        justify-content: center;
+        margin-top: 5%;
+      }
+
+      &.snow {
+        .Snowflake {
+          margin: 0;
+          margin-inline: 4%;
+          width: 18%;
+          text-align: center;
+          display: flex;
+          justify-content: center;
+        }
+
+        .drops {
+          margin-top: 5%;
+        }
+
+        &.rain {
+          .drops {
+            margin-top: 0;
+          }
+
+          .drop-shape {
+            margin-top: 10%;
+            width: 16%;
+            margin-bottom: 2%;
+          }
+
+          .Snowflake {
+            margin-top: 5%;
+
+          }
+        }
+      }
+    }
+
+    .thunderstorm {
+      margin: auto;
+      height: auto;
+      max-width: 75%;
+      text-align: center;
+      -moz-padding-start: 5%;
+      -moz-padding-end: 5%;
+      .Cloud {
+        margin-inline: auto;
+        width: 90%;
+        z-index: 2;
+        position: relative;
+      }
+
+      .thunder{
+        width: 90%;
+        text-align: center;
+        margin-inline: auto;
+        display: flex;
+        justify-content: center;
+      }
+
+      .drop-shape {
+        margin: 15%;
+        margin-inline: 8%;
+        width: 20%;
+      }
+
+      .drops {
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        margin-top: -8%;
+        width: 80%;
+        margin-inline: auto;
+        margin-right: 12%;
+
+        .Flash {
+          margin-top: -22%;
+          margin-right: -10%;
+        }
+      }
+
+      .Flash {
+        margin-top: -30%;
+        -moz-padding-start: 3%;
+        -moz-padding-end: 3%;
+        max-width: 35%;
+        min-width: 30%;
+        width: auto;
+        height: 40%;
+        top: 0;
+        z-index: 1;
+      }
+
+    }
+
+    .fog {
+      text-align: center;
+      width: 100%;
+      height: 100%;
+
+      .cloud-foggy {
+        overflow: hidden;
+        height: 55%;
+      }
+
+      .Cloud {
+        text-align: center;
+        margin-inline: auto;
+        width: 65%;
+        position: relative;
+      }
+
+      .Mist {
+        padding: 6%;
+        position: relative;
+        display: block;
+
+        svg {
+          width: 75%;
+        }
+
+      }
+    }
+
+    .Mist {
+      svg {
+        fill: colors.$fog-gradient;
+      }
+    }
+
+    .Snowflake {
+      svg {
+        fill: colors.$snowflake-gradient;
+      }
+    }
+
+    .Cloud {
+
+      svg {
+        fill: colors.$cloud-gradient;
+      }
+    }
+
+    .Sun {
+      height: 100%;
+
+      svg {
+        fill: colors.$sun-gradient;
+      }
+    }
+
+    .Flash {
+      svg {
+        fill: colors.$thunder-gradient;
+      }
+    }
+
+    .drop-shape {
+      z-index: 1;
+      width: 15%;
+      text-align: center;
+      position: relative;
+      background-color: colors.$water-drop;
+      border-radius: 50% 0 50% 50%;
+      transform: rotate(-30deg);
+      float: left;
+      margin-inline: 4%;
+    }
+
+    .drop-shape:before {
+      content: "";
+      float: left;
+      padding-top: 100%;
+    }
+
+  }

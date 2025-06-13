@@ -52,7 +52,7 @@ export function DataDownload() {
           </DialogDescription>
         </DialogHeader>
 
-        <Popover>
+        <Popover modal={true}>
           <PopoverTrigger asChild>
             <Button
               id="date"

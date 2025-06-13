@@ -1,6 +1,6 @@
-import { RecordData } from "./weather";
+import { RecordData } from "./types";
 
-interface WeatherCondition {
+export interface WeatherCondition {
   text: string;
   code: number;
   icon_day: string;

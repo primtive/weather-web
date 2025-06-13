@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Montserrat } from 'next/font/google'
+import { Montserrat, Rubik } from 'next/font/google'
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner"
 
-const font = Montserrat({subsets: ['cyrillic']})
+const font = Rubik({ subsets: ['cyrillic'] })
 
 export const metadata: Metadata = {
   title: "Метеорологическая панель",
@@ -20,7 +21,8 @@ export default function RootLayout({
       <body className={cn(font.className)}>
         <ThemeProvider>
           {children}
-          </ThemeProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

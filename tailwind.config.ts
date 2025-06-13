@@ -58,7 +58,7 @@ export default {
 			},
 			backgroundImage: {
 				'gradient-main': 'radial-gradient(circle,rgba(122, 174, 207, 1) 0%, rgba(116, 185, 219, 1) 100%);',
-				'gradient-home': 'radial-gradient(circle, rgba(174,226,238,1) 0%, rgba(148,187,233,1) 100%);'
+				'gradient-home': 'radial-gradient(circle, var(--gradient-light) 0%, var(--gradient-dark) 100%);'
 			}
 		}
 	},

@@ -6,30 +6,32 @@ body {
 }
 
 @layer base {
-
   :root {
-    --background: 190 33% 95%;
-    --foreground: 190 5% 10%;
-    --card: 190 33% 90%;
-    --card-foreground: 190 5% 15%;
-    --popover: 190 33% 95%;
-    --popover-foreground: 190 95% 10%;
-    --primary: 190 60% 29%;
+    --background: 208 33% 95%;
+    --foreground: 208 5% 10%;
+    --card: 208 33% 90%;
+    --card-foreground: 208 5% 15%;
+    --popover: 208 33% 95%;
+    --popover-foreground: 208 95% 10%;
+    --primary: 208 60% 55%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 190 30% 70%;
+    --secondary: 208 30% 70%;
     --secondary-foreground: 0 0% 0%;
-    --muted: 152 30% 85%;
-    --muted-foreground: 190 5% 40%;
-    --accent: 152 30% 80%;
-    --accent-foreground: 190 5% 15%;
+    --muted: 170 30% 85%;
+    --muted-foreground: 208 5% 40%;
+    --accent: 170 30% 80%;
+    --accent-foreground: 208 5% 15%;
     --destructive: 0 50% 50%;
-    --destructive-foreground: 190 5% 90%;
-    --border: 190 33% 90%;
-    --input: 190 30% 50%;
-    --ring: 190 60% 29%;
-    --radius: 0.5rem;
-    --chart-1: 190 65% 29%;
-    --chart-2: 190 70% 35%;
+    --destructive-foreground: 208 5% 90%;
+    --border: 208 33% 90%;
+    --input: 208 30% 50%;
+    --ring: 208 100% 55%;
+    --radius: 1.5rem;
+    --radius-xl: 1.5rem;
+    --chart-1: 208 60% 55%;
+    --chart-2: 208 50% 50%;
+    --gradient-light: rgba(174, 226, 238, 1);
+    --gradient-dark: rgba(148, 187, 233, 1);
   }
 
   .dark {
@@ -52,18 +54,21 @@ body {
     --border: 217 30% 20%;
     --input: 217 30% 20%;
     --ring: 217 21% 46%;
-    --radius: 0.5rem;
+    --gradient-light: rgb(33, 36, 43);
+    --gradient-dark: rgb(43, 46, 53);
   }
-
 }
 
 @layer base {
-
   * {
     @apply border-border outline-ring/50;
   }
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  g > text {
+    fill: hsl(var(--foreground));
   }
 }
