@@ -18,6 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="viewport" content="width=520, initial-scale=1" />
+      </head>
       <body className={cn(font.className)}>
         <ThemeProvider>
           {children}

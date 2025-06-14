@@ -1,11 +1,24 @@
 import { WeatherCondition } from "./weatherConditions";
 
-export type TimelineData = Array<
-  {
-    date: Date;
-    value: number;
-  }
->;
+export type TimelineParam =
+  | null
+  | "temp_h"
+  | "temp_e"
+  | "humd_h"
+  | "humd_e"
+  | "pres_h"
+  | "pres_e"
+  | "aqi"
+  | "tvoc"
+  | "eco2"
+  | "light"
+  | "wind_speed"
+  | "rain";
+
+export type TimelineRecord = {
+  date: any;
+  value: any;
+};
 
 export type DashboardData = {
   recordData: RecordData;
@@ -18,9 +31,9 @@ export interface MetricData {
   source: string;
   isExternal: boolean;
   metrics: {
-    temp: number;
-    humd: number;
-    pres: number;
+    temp: number | null;
+    humd: number | null;
+    pres: number | null;
   };
 }
 
@@ -55,4 +68,25 @@ export type RecordData = {
   weatherCode: number;
   uv: number;
   isDay: boolean;
+};
+
+export const nullRecordData: RecordData = {
+  temp_h: null,
+  humd_h: null,
+  pres_h: null,
+  temp_e: null,
+  humd_e: null,
+  pres_e: null,
+  aqi: null,
+  tvoc: null,
+  eco2: null,
+  light: null,
+  wind_dir: null,
+  wind_speed: null,
+  rain: null,
+  time: new Date(),
+  externalSources: [],
+  weatherCode: 0,
+  uv: 0,
+  isDay: true,
 };

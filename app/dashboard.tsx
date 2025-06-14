@@ -22,6 +22,7 @@ import Counter from "@/components/counter";
 import { DashboardData } from "@/data/types";
 import WeatherWidget from "@/components/weather-widget";
 
+
 export default function Dashboard({ data: { accuracyData, comprasionData, recordData, weatherCondition } }: { data: DashboardData }) {
 
   const windroseData: any = [];
@@ -84,7 +85,9 @@ export default function Dashboard({ data: { accuracyData, comprasionData, record
             <div className="flex justify-between items-start">
               <div>
                 <p>Ветер</p>
-                <h2 className="text-3xl font-bold mt-1">{windSpeed} м/с</h2>
+                <h2 className="text-3xl font-bold mt-1">
+                  <Counter value={windSpeed} /> м/с
+                </h2>
               </div>
               <WeatherIcon src={`/icons/all/${0 <= windSpeed && windSpeed <= 12 ? `wind-beaufort-${windSpeed}` : 'wind'}.svg`} />
             </div>
@@ -174,9 +177,9 @@ export default function Dashboard({ data: { accuracyData, comprasionData, record
           <h2 className="mb-6 font-bold text-xl  ">
             Сравнение данных
           </h2>
-          <div className="flex flex-wrap gap-6 justify-between">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 justify-between">
             {comprasionData.map((station, index) => (
-              <div className="min-w-[200px]" key={index}>
+              <div className="min-w-[170px] w-full" key={index}>
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-base">
                     {station.source}
@@ -188,19 +191,19 @@ export default function Dashboard({ data: { accuracyData, comprasionData, record
                   <div className="flex justify-between items-center">
                     <span className="text-base">Температура</span>
                     <span className=" font-bold text-base">
-                      {station.metrics.temp || '?'} °C
+                      <Counter value={station.metrics.temp} decimals={1} /> °C
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-base">Влажность</span>
                     <span className=" font-bold text-base">
-                      {station.metrics.humd || '?'}%
+                      <Counter value={station.metrics.humd} />%
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-base">Давление</span>
                     <span className=" font-bold text-base">
-                      {station.metrics.pres || '?'} гПа
+                      <Counter value={station.metrics.pres} /> гПа
                     </span>
                   </div>
                 </div>

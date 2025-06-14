@@ -7,17 +7,12 @@ import { calculateFeelsLike } from '@/data/weather';
 import Image from "next/image";
 import { getWeatherConditionIcon, WeatherCondition } from '@/data/weatherConditions';
 import Counter from './counter';
-import { useTheme } from 'next-themes';
-import { cn } from '@/lib/utils';
-
 
 const WeatherWidget = ({ data, weatherCondition }: { data: RecordData, weatherCondition: WeatherCondition }) => {
 
-  const { theme } = useTheme();
-
   return (
     <div className="daniel-szulc-weather-widget">
-      <div className={cn("weather-widget", theme === 'dark' ? "night-mode" : "")}>
+      <div className={"weather-widget"}>
         <div className="background rounded-xl" />
         <div className="content">
           <h2>{process.env.NEXT_PUBLIC_LOCATION}</h2>

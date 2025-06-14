@@ -1,6 +1,6 @@
 "use client";
-import { DashboardData, RecordData } from "@/data/types";
-import {  getDashboardData } from "@/data/weather";
+import { DashboardData, nullRecordData, RecordData } from "@/data/types";
+import { getDashboardData } from "@/data/weather";
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 interface WeatherContextType {
@@ -15,7 +15,7 @@ const WeatherContext = createContext<WeatherContextType | undefined>(undefined);
 export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
-  const [recordData, setRecordData] = useState<RecordData | null>(null);
+  const [recordData, setRecordData] = useState<RecordData>(nullRecordData);
   const dashboardData = useMemo(() => {
     return recordData && getDashboardData(recordData);
   }, [recordData]);

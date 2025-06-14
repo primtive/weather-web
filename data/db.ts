@@ -1,19 +1,34 @@
 import prisma from "@/data/prisma";
-import { RecordData, TimelineData } from "./types";
+import { RecordData, TimelineRecord, TimelineParam } from "./types";
+import { Prisma } from "@prisma/client";
 
-export async function getTimelineData(): Promise<TimelineData> {
+export async function getTimelineData(
+  param: TimelineParam
+): Promise<TimelineRecord[]> {
+  const select = {
+    time: true,
+    ...(param ? { [param]: true } : {}),
+  } satisfies Prisma.RecordSelect;
+
   const records = await prisma.record.findMany({
     orderBy: {
       time: "asc",
     },
-    select: {
-      time: true,
-    },
+    select,
+    ...(param
+      ? {
+          where: {
+            [param]: {
+              not: null,
+            },
+          },
+        }
+      : {}),
   });
 
   return records.map((record) => ({
     date: record.time,
-    value: 1,
+    value: param ? (record as Record<string, any>)[param] : 1,
   }));
 }
 

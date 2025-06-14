@@ -51,14 +51,14 @@ export const WindroseChart = ({ windroseData }: any) => {
             <ToggleGroupItem value="official">Интернет</ToggleGroupItem>
           </ToggleGroup>
         </CardHeader>
-        <CardContent className="min-w-[550px] flex justify-center items-center">
+        <CardContent className="flex justify-center items-center">
           <Chart
             chartData={mode == "local" ? windroseData : officialChartData}
             responsive
             height={550}
             width={550}
             legendGap={20}
-            className="ml-[-60px] 2xl:scale-[0.9]"
+            className="ml-[-60px] scale-[0.9] my-[-60px]"
           />
         </CardContent>
       </Card>

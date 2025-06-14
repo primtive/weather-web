@@ -1,5 +1,5 @@
 "use client"
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AreaChart,
   Area,
@@ -11,26 +11,35 @@ import {
 import { format } from "date-fns";
 import { useWeather } from "@/contexts/WeatherContext";
 import { ru } from 'date-fns/locale';
+import { TimelineParam } from "@/data/types";
+import { cn } from "@/lib/utils";
 
 
 // Кастомный Tooltip для отображения даты
-const CustomTooltip = ({ active, payload }: any) => {
+const CustomTooltip = ({ active, payload, displayData }: any) => {
   if (active && payload && payload.length) {
     const date = payload[0].payload.date;
     return (
       <div className="custom-tooltip">
-        <p>{format(date, "yyyy-MM-dd HH:mm", { locale: ru })}</p>
+        <p>{format(date, "d MMM HH:mm", { locale: ru })}</p>
+        {displayData &&
+          <p>{payload[0].payload.value}</p>}
       </div>
     );
   }
   return null;
 };
 
-const Timeline = ({ data }: { data: { date: Date, value: any }[] }) => {
+type TimelineProps = {
+  data: { date: Date, value: any }[];
+  mode: TimelineParam;
+};
+
+const Timeline = ({ data, mode }: TimelineProps) => {
   const { setSelectedDate } = useWeather();
 
   return (
-    <div style={{ width: "100%", height: 100 }}>
+    <div className={cn('w-full', mode ? '' : 'h-[100]')}>
       <ResponsiveContainer>
         <AreaChart
           data={data}
@@ -48,8 +57,9 @@ const Timeline = ({ data }: { data: { date: Date, value: any }[] }) => {
             tickFormatter={(dateStr) => format(dateStr, "d MMM", { locale: ru })}
           />
           <YAxis domain={[0, 2]} hide={true} />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={<CustomTooltip displayData={mode} />} />
           <Area
+            animationDuration={100}
             type="monotone"
             dataKey="value"
             stroke="hsl(var(--chart-1))"

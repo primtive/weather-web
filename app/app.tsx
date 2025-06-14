@@ -1,6 +1,6 @@
 "use client";
 import { ThemeToggle } from "@/components/theme-toggle";
-import React from "react";
+import React, { useEffect } from "react";
 import { DataDownload } from "@/components/data-download";
 import Timeline from "@/components/timeline";
 import Dashboard from "./dashboard";
@@ -8,33 +8,54 @@ import { format, addMinutes } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { useWeather } from "@/contexts/WeatherContext";
 import { useWS } from "@/contexts/WebSocketContext";
-import { DashboardData, TimelineData } from "@/data/types";
+import { RecordData, TimelineParam, TimelineRecord } from "@/data/types";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem, SelectSeparator } from "@/components/ui/select";
 
 type AppProps = {
-  timelineData: TimelineData;
-  initDashboardData: DashboardData;
+  initTimelineData: TimelineRecord[];
+  initRecordData: RecordData;
 }
 
-export default function App({ timelineData, initDashboardData }: AppProps) {
+export default function App({ initTimelineData, initRecordData }: AppProps) {
 
-  const { dashboardData } = useWeather();
+  const [selectedMode, setSelectedMode] = React.useState<TimelineParam | 'none'>(null);
+  const [timelineData, setTimelineData] = React.useState<TimelineRecord[]>(initTimelineData);
+
+  useEffect(() => {
+    if (selectedMode && selectedMode !== 'none') {
+      fetch(`/api/timeline?mode=${selectedMode}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          setTimelineData(data.map((i: TimelineRecord) => ({ value: i.value, date: new Date(i.date) })))
+        });
+    } else {
+      setTimelineData(initTimelineData);
+      setSelectedMode(null)
+    }
+  }, [selectedMode]);
+
+  const { dashboardData, setRecordData } = useWeather();
   const { isConnected, connect, disconnect } = useWS();
+
+  useEffect(() => {
+    setRecordData(initRecordData);
+  }, [])
 
   return (
     <div className="flex">
       {/* Main content */}
-      <main className="flex-1 p-8 mx-0 lg:mx-10 2xl:mx-20">
+      <main className="flex-1 py-8 mx-4 lg:mx-10 2xl:mx-20">
         {/* Header */}
         <header className="flex justify-between items-center mb-10">
           <div>
             <h1 className="text-2xl font-bold leading-6">
               Метеорологическая панель
             </h1>
-            <p className=" mt-2 ">
-              Последнее обновление: {format(addMinutes(initDashboardData.recordData.time, 300), 'dd MMMM yyyy, HH:mm:ss', { locale: ru })}
+            <p className=" mt-2 " suppressHydrationWarning>
+              Последнее обновление: {format(addMinutes(initRecordData.time, 300), 'dd MMMM yyyy, HH:mm:ss', { locale: ru })}
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -44,11 +65,35 @@ export default function App({ timelineData, initDashboardData }: AppProps) {
         </header>
 
         <div className="flex gap-5 mb-5">
-          <Timeline data={timelineData} />
+          <Timeline data={timelineData} mode={selectedMode as TimelineParam} />
           <div className="space-y-3">
-            <div>
+            <Select value={selectedMode || ''} onValueChange={(mode) => setSelectedMode(mode as TimelineParam | 'none')}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Выберите показатель" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="none">Нет</SelectItem>
+                  <SelectSeparator></SelectSeparator>
+                  <SelectLabel>Показатель</SelectLabel>
+                  <SelectItem value="temp_e">Температура</SelectItem>
+                  <SelectItem value="humd_e">Влажность</SelectItem>
+                  <SelectItem value="pres_e">Давление</SelectItem>
+                  <SelectItem value="temp_h">Температура в комнате</SelectItem>
+                  <SelectItem value="humd_h">Влажность в комнате</SelectItem>
+                  <SelectItem value="pres_h">Давление в комнате</SelectItem>
+                  <SelectItem value="aqi">ИКВ</SelectItem>
+                  <SelectItem value="tvoc">TVOC</SelectItem>
+                  <SelectItem value="eco2">CO2</SelectItem>
+                  <SelectItem value="light">Яркость</SelectItem>
+                  <SelectItem value="wind_speed">Скорость ветра</SelectItem>
+                  <SelectItem value="rain">Уровень дождя</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <div suppressHydrationWarning>
               <p>Выбранная дата:</p>
-              {format(dashboardData?.recordData.time || initDashboardData.recordData.time, 'dd MMMM yyyy, HH:mm:ss', { locale: ru })} <br />
+              {format(dashboardData!.recordData.time, 'dd MMMM yyyy, HH:mm:ss', { locale: ru })} <br />
             </div>
             <div className="flex">
               <div className="flex items-center space-x-2">
@@ -60,7 +105,7 @@ export default function App({ timelineData, initDashboardData }: AppProps) {
         </div>
 
 
-        <Dashboard data={dashboardData || initDashboardData} />
+        <Dashboard data={dashboardData!} />
 
       </main >
     </div >

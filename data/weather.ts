@@ -1,8 +1,5 @@
-
 import { MetricData, AccuracyResult, RecordData, DashboardData } from "./types";
-import {
-  calculateWeatherCondition,
-} from "./weatherConditions";
+import { calculateWeatherCondition } from "./weatherConditions";
 
 const calculateAccuracy = (data: MetricData[]): AccuracyResult[] => {
   const local = data.find((d) => !d.isExternal);
@@ -12,11 +9,11 @@ const calculateAccuracy = (data: MetricData[]): AccuracyResult[] => {
 
   const avgMetrics = {
     temp:
-      externals.reduce((sum, e) => sum + e.metrics.temp, 0) / externals.length,
+      externals.reduce((sum, e) => sum + e.metrics.temp!, 0) / externals.length,
     humd:
-      externals.reduce((sum, e) => sum + e.metrics.humd, 0) / externals.length,
+      externals.reduce((sum, e) => sum + e.metrics.humd!, 0) / externals.length,
     pres:
-      externals.reduce((sum, e) => sum + e.metrics.pres, 0) / externals.length,
+      externals.reduce((sum, e) => sum + e.metrics.pres!, 0) / externals.length,
   };
 
   const metricNames = {
@@ -27,6 +24,8 @@ const calculateAccuracy = (data: MetricData[]): AccuracyResult[] => {
 
   return (Object.keys(avgMetrics) as Array<keyof typeof avgMetrics>).map(
     (key) => {
+      if (local.metrics[key] === null)
+        return { metric: metricNames[key], value: 0 };
       const diff = Math.abs(local.metrics[key] - avgMetrics[key]);
       const accuracy =
         local.metrics[key] && key === "humd"
@@ -62,10 +61,7 @@ export function getWindDirection(angle: number): string {
   return "?";
 }
 
-
-
 export function getDashboardData(recordData: RecordData): DashboardData {
-
   const weatherApiData = recordData.externalSources.find((x) => x.id == 0);
   const openWeatherMapData = recordData.externalSources.find((x) => x.id == 1);
 
@@ -74,27 +70,27 @@ export function getDashboardData(recordData: RecordData): DashboardData {
       source: "Локальная станция",
       isExternal: false,
       metrics: {
-        temp: recordData.temp_e!,
-        humd: recordData.humd_e!,
-        pres: recordData.pres_e!,
+        temp: recordData.temp_e,
+        humd: recordData.humd_e,
+        pres: recordData.pres_e,
       },
     },
     {
       source: "WeatherAPI",
       isExternal: true,
       metrics: {
-        temp: weatherApiData!.temp,
-        humd: weatherApiData!.humd,
-        pres: weatherApiData!.pres,
+        temp: weatherApiData?.temp || null,
+        humd: weatherApiData?.humd || null,
+        pres: weatherApiData?.pres || null,
       },
     },
     {
       source: "OpenWeatherMap",
       isExternal: true,
       metrics: {
-        temp: openWeatherMapData!.temp,
-        humd: openWeatherMapData!.humd,
-        pres: openWeatherMapData!.pres,
+        temp: openWeatherMapData?.temp || null,
+        humd: openWeatherMapData?.humd || null,
+        pres: openWeatherMapData?.pres || null,
       },
     },
   ];
@@ -128,7 +124,6 @@ export async function getWeatherApiData() {
   return await req.json();
 }
 
-
 /**
  * Рассчитывает ощущаемую температуру (feels-like) на основе:
  * @param temperature - температура в °C
@@ -137,20 +132,20 @@ export async function getWeatherApiData() {
  * @returns ощущаемая температура в °C
  */
 export function calculateFeelsLike(
-    temperature: number,
-    humidity: number = 50,
-    windSpeed: number = 0
+  temperature: number,
+  humidity: number = 50,
+  windSpeed: number = 0
 ): number {
-    // Если очень жарко и влажно → считаем Heat Index
-    if (temperature >= 20 && humidity >= 40) {
-        return calculateHeatIndex(temperature, humidity);
-    }
-    // Если холодно и ветрено → считаем Wind Chill
-    else if (temperature <= 10 && windSpeed >= 5) {
-        return calculateWindChill(temperature, windSpeed);
-    }
-    // Иначе возвращаем фактическую температуру
-    return temperature;
+  // Если очень жарко и влажно → считаем Heat Index
+  if (temperature >= 20 && humidity >= 40) {
+    return calculateHeatIndex(temperature, humidity);
+  }
+  // Если холодно и ветрено → считаем Wind Chill
+  else if (temperature <= 10 && windSpeed >= 5) {
+    return calculateWindChill(temperature, windSpeed);
+  }
+  // Иначе возвращаем фактическую температуру
+  return temperature;
 }
 
 /**
@@ -158,31 +153,31 @@ export function calculateFeelsLike(
  * Формула: https://en.wikipedia.org/wiki/Heat_index
  */
 function calculateHeatIndex(temperature: number, humidity: number): number {
-    const c1 = -8.78469475556;
-    const c2 = 1.61139411;
-    const c3 = 2.33854883889;
-    const c4 = -0.14611605;
-    const c5 = -0.012308094;
-    const c6 = -0.0164248277778;
-    const c7 = 0.002211732;
-    const c8 = 0.00072546;
-    const c9 = -0.000003582;
+  const c1 = -8.78469475556;
+  const c2 = 1.61139411;
+  const c3 = 2.33854883889;
+  const c4 = -0.14611605;
+  const c5 = -0.012308094;
+  const c6 = -0.0164248277778;
+  const c7 = 0.002211732;
+  const c8 = 0.00072546;
+  const c9 = -0.000003582;
 
-    const T = temperature;
-    const R = humidity;
+  const T = temperature;
+  const R = humidity;
 
-    const heatIndex =
-        c1 +
-        c2 * T +
-        c3 * R +
-        c4 * T * R +
-        c5 * T * T +
-        c6 * R * R +
-        c7 * T * T * R +
-        c8 * T * R * R +
-        c9 * T * T * R * R;
+  const heatIndex =
+    c1 +
+    c2 * T +
+    c3 * R +
+    c4 * T * R +
+    c5 * T * T +
+    c6 * R * R +
+    c7 * T * T * R +
+    c8 * T * R * R +
+    c9 * T * T * R * R;
 
-    return Math.round(heatIndex * 10) / 10; // Округляем до 1 знака после запятой
+  return Math.round(heatIndex * 10) / 10; // Округляем до 1 знака после запятой
 }
 
 /**
@@ -190,11 +185,11 @@ function calculateHeatIndex(temperature: number, humidity: number): number {
  * Формула: https://en.wikipedia.org/wiki/Wind_chill
  */
 function calculateWindChill(temperature: number, windSpeed: number): number {
-    const windChill =
-        13.12 +
-        0.6215 * temperature -
-        11.37 * Math.pow(windSpeed, 0.16) +
-        0.3965 * temperature * Math.pow(windSpeed, 0.16);
+  const windChill =
+    13.12 +
+    0.6215 * temperature -
+    11.37 * Math.pow(windSpeed, 0.16) +
+    0.3965 * temperature * Math.pow(windSpeed, 0.16);
 
-    return Math.round(windChill * 10) / 10; // Округляем до 1 знака после запятой
+  return Math.round(windChill * 10) / 10; // Округляем до 1 знака после запятой
 }

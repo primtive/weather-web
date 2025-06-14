@@ -24,8 +24,7 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function HomePage() {
-  const timelineData = await getTimelineData();
+  const timelineData = await getTimelineData(null);
   const recordData = await getLastRecordData();
-  const dashboardData = await getDashboardData(recordData);
-  return <App timelineData={timelineData} initDashboardData={dashboardData} />
+  return <App initTimelineData={timelineData} initRecordData={recordData} />
 }
