@@ -28,7 +28,6 @@ export default function App({ initTimelineData, initRecordData }: AppProps) {
       fetch(`/api/timeline?mode=${selectedMode}`)
         .then(response => response.json())
         .then(data => {
-          console.log(data);
           setTimelineData(data.map((i: TimelineRecord) => ({ value: i.value, date: new Date(i.date) })))
         });
     } else {
