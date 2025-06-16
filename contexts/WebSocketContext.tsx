@@ -40,8 +40,9 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     socketRef.current.onmessage = (event) => {
-      console.log(JSON.stringify(event.data));
-      setRecordData(JSON.parse(event.data) as RecordData);
+      const data = JSON.parse(event.data);
+      console.log(data);
+      setRecordData({...data, time: new Date(data.time)} as RecordData);
     };
 
     socketRef.current.onclose = () => {

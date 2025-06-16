@@ -3,13 +3,13 @@ import { getOpenWeatherMapData, getWeatherApiData } from "@/data/weather";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const data = await req.json();
+  const body = await req.json();
 
   const openWeatherMapData = await getOpenWeatherMapData();
   const weatherApiData = await getWeatherApiData();
 
-  const record = {
-    ...data,
+  const data = {
+    ...body,
     externalSources: [
       {
         id: 0,
@@ -29,8 +29,8 @@ export async function POST(req: NextRequest) {
     isDay: weatherApiData.current.is_day == 1,
   };
 
-  await prisma.record.create({
-    data: record,
+  const record = await prisma.record.create({
+    data,
   });
   await fetch(process.env.WEBSOCKET_SERVER_URL!, {
     method: "POST",

@@ -56,7 +56,7 @@ const Timeline = ({ data, mode }: TimelineProps) => {
             scale="time"
             tickFormatter={(dateStr) => format(dateStr, "d MMM", { locale: ru })}
           />
-          <YAxis domain={[0, 2]} hide={true} />
+          <YAxis domain={['dataMin', 'dataMax']} hide={true} type="number" />
           <Tooltip content={<CustomTooltip displayData={mode} />} />
           <Area
             animationDuration={100}

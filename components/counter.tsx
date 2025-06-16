@@ -52,7 +52,7 @@ export default function Counter({ value, decimals = 0 }: CounterProps) {
   }, [value]);
 
   return (
-    value ?
+    value !== null ?
       <CountUp
         start={oldVal}
         separator=""
