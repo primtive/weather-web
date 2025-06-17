@@ -8,7 +8,7 @@ import { format, addMinutes } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { useWeather } from "@/contexts/WeatherContext";
 import { useWS } from "@/contexts/WebSocketContext";
-import { RecordData, TimelineParam, TimelineRecord } from "@/data/types";
+import { RawWindroseData, RecordData, TimelineParam, TimelineRecord } from "@/data/types";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem, SelectSeparator } from "@/components/ui/select";
@@ -16,9 +16,10 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectL
 type AppProps = {
   initTimelineData: TimelineRecord[];
   initRecordData: RecordData;
+  windroseData: RawWindroseData;
 }
 
-export default function App({ initTimelineData, initRecordData }: AppProps) {
+export default function App({ initTimelineData, initRecordData, windroseData }: AppProps) {
 
   const [selectedMode, setSelectedMode] = React.useState<TimelineParam | 'none'>(null);
   const [timelineData, setTimelineData] = React.useState<TimelineRecord[]>(initTimelineData);
@@ -104,7 +105,7 @@ export default function App({ initTimelineData, initRecordData }: AppProps) {
         </div>
 
 
-        <Dashboard data={dashboardData!} />
+        <Dashboard data={dashboardData!} windroseData={windroseData} />
 
       </main >
     </div >

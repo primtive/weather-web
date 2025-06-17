@@ -1,5 +1,10 @@
 import { WeatherCondition } from "./weatherConditions";
 
+export type RawWindroseData = {
+  direction: number[];
+  speed: number[];
+};
+
 export type TimelineParam =
   | null
   | "temp_h"

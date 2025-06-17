@@ -19,13 +19,15 @@ import {
 } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils";
 import Counter from "@/components/counter";
-import { DashboardData } from "@/data/types";
+import { DashboardData, RawWindroseData } from "@/data/types";
 import WeatherWidget from "@/components/weather-widget";
 
+type DashboardProps = {
+  data: DashboardData;
+  windroseData: RawWindroseData;
+}
 
-export default function Dashboard({ data: { accuracyData, comprasionData, recordData, weatherCondition } }: { data: DashboardData }) {
-
-  const windroseData: any = [];
+export default function Dashboard({ data: { accuracyData, comprasionData, recordData, weatherCondition }, windroseData }: DashboardProps) {
   const windSpeed = Math.round(recordData.wind_speed!);
 
   return (
@@ -240,29 +242,8 @@ export default function Dashboard({ data: { accuracyData, comprasionData, record
         </CardContent>
       </Card>
 
-      {/* <Card className="border  shadow-sm"> */}
-      {/* <CardHeader className="pb-0 flex flex-wrap md:flex-nowrap justify-between items-center"> */}
-      {/* <CardTitle className="text-lg font-semibold"> */}
-      {/* Температурный тренд */}
-      {/* </CardTitle> */}
-      {/* <ToggleGroup type="single" defaultValue="week"> */}
-      {/* <ToggleGroupItem value="week"> */}
-      {/* Неделя */}
-      {/* </ToggleGroupItem> */}
-      {/* <ToggleGroupItem value="month"> */}
-      {/* Месяц */}
-      {/* </ToggleGroupItem> */}
-      {/* </ToggleGroup> */}
-      {/* </CardHeader> */}
-      {/* <CardContent className="p-6"> */}
-      {/* <TemperatureChart /> */}
-      {/* </CardContent> */}
-      {/* </Card> */}
-
       {/* Wind Pattern */}
       <WindroseChart windroseData={windroseData} />
-
     </div>
   )
-
 }

@@ -1,7 +1,6 @@
 
 import { Metadata } from "next";
-import { getDashboardData } from "@/data/weather";
-import { getLastRecordData, getTimelineData } from "@/data/db";
+import { getLastRecordData, getTimelineData, getWindroseData } from "@/data/db";
 import App from "./app";
 import { calculateWeatherCondition } from "@/data/weatherConditions";
 
@@ -26,5 +25,6 @@ export const revalidate = 0;
 export default async function HomePage() {
   const timelineData = await getTimelineData(null);
   const recordData = await getLastRecordData();
-  return <App initTimelineData={timelineData} initRecordData={recordData} />
+  const windroseData = await getWindroseData();
+  return <App initTimelineData={timelineData} initRecordData={recordData} windroseData={windroseData} />
 }

@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
-import { calculateWindRose, Chart } from "@eunchurn/react-windrose";
+import React, { useMemo } from "react";
+import { calculateWindRose, Chart, ChartData } from "@eunchurn/react-windrose";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
+import { RawWindroseData } from "@/data/types";
 
 async function getWindroseData() {
   const req = await fetch(
@@ -20,12 +21,13 @@ async function getWindroseData() {
   return chartData;
 }
 
-export const WindroseChart = ({ windroseData }: any) => {
+export const WindroseChart = ({ windroseData }: { windroseData: RawWindroseData }) => {
   const [mode, setMode] = React.useState("local");
   const [fetched, setFetched] = React.useState(false);
-  const [officialChartData, setOfficialChartData] = React.useState<any>(
+  const [officialChartData, setOfficialChartData] = React.useState<ChartData[]>(
     calculateWindRose({ direction: [], speed: [] })
   );
+  const localChartData = useMemo(() => calculateWindRose(windroseData), [windroseData]);
   React.useEffect(() => {
     if (mode == "official" && !fetched) {
       setFetched(true);
@@ -53,7 +55,7 @@ export const WindroseChart = ({ windroseData }: any) => {
         </CardHeader>
         <CardContent className="flex justify-center items-center">
           <Chart
-            chartData={mode == "local" ? windroseData : officialChartData}
+            chartData={mode == "local" ? localChartData : officialChartData}
             responsive
             height={550}
             width={550}
@@ -65,3 +67,5 @@ export const WindroseChart = ({ windroseData }: any) => {
     </>
   );
 };
+
+
