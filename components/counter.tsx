@@ -37,12 +37,13 @@ function countSignificantDecimals(num: number, decimals: number): number {
   return trimmed.length;
 }
 
-type CounterProps = {
+interface CounterProps {
   value: number | null;
   decimals?: number;
+  className?: string;
 }
 
-export default function Counter({ value, decimals = 0 }: CounterProps) {
+export default function Counter({ value, decimals = 0, className }: CounterProps) {
   const [oldVal, setOldVal] = useState(0);
   const prevValueRef = useRef(value);
 
@@ -58,6 +59,7 @@ export default function Counter({ value, decimals = 0 }: CounterProps) {
         separator=""
         end={value}
         duration={1}
+        className={className}
         decimals={decimals === 0 ? 0 : countSignificantDecimals(value, decimals)}
       />
       : <span>?</span>
