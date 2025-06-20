@@ -1,6 +1,6 @@
-// https://github.com/daniel-szulc/react-weather-widget/blob/master/src/lib/components/WeatherWidget.js
+// background from https://github.com/daniel-szulc/react-weather-widget
 
-import React, { use } from 'react';
+import React from 'react';
 import './styles/styles.scss';
 import { RecordData } from '@/data/types';
 import { calculateFeelsLike } from '@/data/weather';

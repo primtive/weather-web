@@ -42,3 +42,4 @@ next-env.d.ts
 
 /generated
 example_req.json
+/.vscode
