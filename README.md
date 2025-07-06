@@ -56,4 +56,4 @@ This project serves as the web interface for a DIY weather station. It fetches, 
 
 ## Hardware Setup
 
-This web application is designed to work with the ESP32-based weather station from the [weather-esp](https://github.com/[YOUR_USERNAME]/weather-esp) repository. Please refer to that project for hardware setup instructions.
+This web application is designed to work with the ESP32-based weather station from the [weather-esp](https://github.com/primtive/weather-esp) repository. Please refer to that project for hardware setup instructions.

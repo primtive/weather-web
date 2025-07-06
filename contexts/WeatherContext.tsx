@@ -2,6 +2,7 @@
 import { DashboardData, nullRecordData, RecordData } from "@/data/types";
 import { getDashboardData } from "@/data/weather";
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner"
 
 interface WeatherContextType {
   selectedDate: Date | null;
@@ -24,7 +25,12 @@ export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({ child
   useEffect(() => {
     const fetchData = async () => {
       if (selectedDate) {
-        const recordData = await (await fetch(`/api/weather?date=${selectedDate.toISOString()}`)).json() as RecordData
+        const req = await fetch(`/api/weather?date=${selectedDate.toISOString()}`)
+        if (req.status !== 200) {
+          toast('/api/weather error')
+          return
+        }
+        const recordData = await req.json() as RecordData
         setRecordData(recordData);
       }
     };

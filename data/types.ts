@@ -21,8 +21,8 @@ export type TimelineParam =
   | "rain";
 
 export type TimelineRecord = {
-  date: any;
-  value: any;
+  time: number;
+  value: number;
 };
 
 export type DashboardData = {

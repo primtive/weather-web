@@ -1,36 +1,99 @@
 import prisma from "@/data/prisma";
-import { RecordData, TimelineRecord, TimelineParam, RawWindroseData } from "./types";
+import {
+  RecordData,
+  TimelineRecord,
+  TimelineParam,
+  RawWindroseData,
+} from "./types";
 import { Prisma } from "@prisma/client";
-import { ChartData } from "@eunchurn/react-windrose";
+
+
+const TIMELINE_SIZE = 100;
 
 export async function getTimelineData(
-  param: TimelineParam
+  mode: TimelineParam,
+  minDate?: number,
+  maxDate?: number,
 ): Promise<TimelineRecord[]> {
+
+  let min, max;
+
+  if (minDate && maxDate) {
+    min = minDate;
+    max = maxDate;
+  } else {
+    const dateRange = await prisma.record.aggregate({
+      _min: { time: true },
+      _max: { time: true },
+    });
+    min = dateRange._min.time!.getTime();
+    max = dateRange._max.time!.getTime();
+  }
+
+  const totalDuration = max - min;
+  const interval = totalDuration / (TIMELINE_SIZE - 1);
+
+  const targetDates = [];
+  for (let i = 0; i < TIMELINE_SIZE; i++) {
+    targetDates.push(new Date(min + interval * i));
+  }
+
   const select = {
     time: true,
-    ...(param ? { [param]: true } : {}),
+    ...(mode ? { [mode]: true } : {}),
   } satisfies Prisma.RecordSelect;
 
-  const records = await prisma.record.findMany({
-    orderBy: {
-      time: "asc",
+  const allRecords = await prisma.record.findMany({
+    where: {
+      time: {
+        gt: new Date(min),
+        lt: new Date(max)
+      }
     },
     select,
-    ...(param
-      ? {
-          where: {
-            [param]: {
-              not: null,
-            },
-          },
-        }
-      : {}),
+    orderBy: {
+      time: 'asc'
+    }
   });
 
-  return records.map((record) => ({
-    date: record.time,
-    value: param ? (record as Record<string, any>)[param] : 1,
-  }));
+  if (allRecords.length <= TIMELINE_SIZE) {
+    return allRecords.map(r => ({
+      time: r.time.getTime(),
+      value: mode
+        ? (r as Record<string, any>)[mode]
+        : 1
+    }))
+  }
+
+  const results = targetDates.map(targetDate => {
+    let closestRecord: (typeof allRecords)[number] | null = null;
+    let smallestDiff = Infinity;
+
+    for (const record of allRecords) {
+      if (!record.time) continue;
+
+      const diff = Math.abs(record.time.getTime() - targetDate.getTime());
+
+      if (diff < smallestDiff) {
+        smallestDiff = diff;
+        closestRecord = record;
+      }
+    }
+
+    return {
+      time: closestRecord!.time.getTime(),
+      value: mode && closestRecord
+        ? (closestRecord as Record<string, any>)[mode]
+        : 1
+    };
+  }).filter(Boolean);
+
+  // Drop duplicates by 'time'
+  const uniqueResults = Array.from(
+    new Map(results.map(item => [item.time, item])).values()
+  );
+
+  return uniqueResults;
 }
 
 export async function getLastRecordData(): Promise<RecordData> {

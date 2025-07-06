@@ -2,7 +2,6 @@
 import { ThemeToggle } from "@/components/theme-toggle";
 import React, { useEffect } from "react";
 import { DataDownload } from "@/components/data-download";
-import Timeline from "@/components/timeline";
 import Dashboard from "./dashboard";
 import { format, addMinutes } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -12,6 +11,7 @@ import { RawWindroseData, RecordData, TimelineParam, TimelineRecord } from "@/da
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem, SelectSeparator } from "@/components/ui/select";
+import Timeline from "@/components/timeline";
 
 type AppProps = {
   initTimelineData: TimelineRecord[];
@@ -29,7 +29,7 @@ export default function App({ initTimelineData, initRecordData, windroseData }: 
       fetch(`/api/timeline?mode=${selectedMode}`)
         .then(response => response.json())
         .then(data => {
-          setTimelineData(data.map((i: TimelineRecord) => ({ value: i.value, date: new Date(i.date) })))
+          setTimelineData(data)
         });
     } else {
       setTimelineData(initTimelineData);
@@ -64,9 +64,11 @@ export default function App({ initTimelineData, initRecordData, windroseData }: 
           </div>
         </header>
 
-        <div className="flex gap-5 mb-5">
+        <div className="md:flex gap-5 mb-5">
           <Timeline data={timelineData} mode={selectedMode as TimelineParam} />
+          {/* <Example data={timelineData} mode={selectedMode as TimelineParam} /> */}
           <div className="space-y-3">
+            <div className="flex items-center justify-between md:block">
             <Select value={selectedMode || ''} onValueChange={(mode) => setSelectedMode(mode as TimelineParam | 'none')}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Выберите показатель" />
@@ -94,6 +96,7 @@ export default function App({ initTimelineData, initRecordData, windroseData }: 
             <div suppressHydrationWarning>
               <p>Выбранная дата:</p>
               {format(dashboardData!.recordData.time, 'dd MMMM yyyy, HH:mm:ss', { locale: ru })} <br />
+            </div>
             </div>
             <div className="flex">
               <div className="flex items-center space-x-2">

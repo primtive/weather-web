@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Montserrat, Rubik } from 'next/font/google'
+import { Rubik } from 'next/font/google'
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner"
+import type { Viewport } from 'next'
+
+export const viewport: Viewport = {
+  width: '520',
+  initialScale: 1
+}
 
 const font = Rubik({ subsets: ['cyrillic'] })
 
@@ -18,9 +24,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta name="viewport" content="width=520, initial-scale=1" />
-      </head>
       <body className={cn(font.className)}>
         <ThemeProvider>
           {children}
