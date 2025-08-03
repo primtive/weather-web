@@ -80,7 +80,7 @@ export function DataDownload() {
           <PopoverContent className="w-auto p-0" align="start">
             <Calendar
               locale={ru}
-              initialFocus
+              autoFocus
               mode="range"
               defaultMonth={date?.from}
               selected={date}
