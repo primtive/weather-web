@@ -1,0 +1,46 @@
+.widget-bg {
+  margin: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  overflow: hidden;
+  background: -webkit-linear-gradient(
+    45deg,
+    var(--base-first-color),
+    var(--base-second-color)
+  );
+  background: linear-gradient(
+    45deg,
+    var(--base-first-color),
+    var(--base-second-color)
+  );
+
+  &::after {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    content: "";
+    width: 150%;
+    height: 130%;
+    margin: 0;
+    background: -webkit-linear-gradient(
+      45deg,
+      var(--base-first-color),
+      var(--base-second-color)
+    );
+    background: linear-gradient(
+      45deg,
+      var(--base-first-color),
+      var(--base-second-color)
+    );
+    border-radius: 100%;
+    float: left;
+  }
+}
+
+.light-font {
+  color: rgba(white, 0.7);
+  font-size: 80%;
+}
